@@ -49,8 +49,8 @@ and hold only its **ratchet** — the existing violations it has not fixed yet, 
    ```yaml
    jobs:
      standards:
-       uses: cantica-tech/standards/.github/workflows/lint.yml@v0.1.1
-       with: { ref: v0.1.1 }
+       uses: cantica-tech/standards/.github/workflows/lint.yml@v0.1.2
+       with: { ref: v0.1.2 }
    ```
 
 4. TypeScript: the sync writes `.standards/eslint-standard.mjs` (not named eslint.config.*: ESLint would take it for that folder's config), `.standards/tsconfig.strict.json` and

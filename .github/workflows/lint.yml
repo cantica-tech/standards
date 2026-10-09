@@ -2,8 +2,8 @@
 #
 #   jobs:
 #     standards:
-#       uses: cantica-tech/standards/.github/workflows/lint.yml@v0.1.1
-#       with: { ref: v0.1.1 }
+#       uses: cantica-tech/standards/.github/workflows/lint.yml@v0.1.2
+#       with: { ref: v0.1.2 }
 #
 # It checks the repository's copy of the standards, then runs `task lint` and `task typecheck`
 # exactly as a developer does locally.

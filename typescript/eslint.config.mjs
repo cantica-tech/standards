@@ -1,7 +1,9 @@
-// cantica-tech TypeScript lint standard (ESLint flat config).
-// A consumer's eslint.config.mjs:
-//   import standard from "@cantica-tech/eslint-config";
-//   export default [...standard({ tsconfigRootDir: import.meta.dirname }), /* its own ratchet */];
+// cantica-tech TypeScript lint standard (ESLint ≥ 9 flat config). Synced as `.standards/eslint.config.mjs`;
+// the repository's own eslint.config.mjs:
+//   import standard from "./.standards/eslint.config.mjs";
+//   export default [...standard({ tsconfigRootDir: import.meta.dirname }), /* its own settings */];
+// Its devDependencies: eslint, @eslint/js, typescript-eslint, eslint-config-prettier. The ratchet is ESLint's
+// bulk suppressions file (eslint-suppressions.json, `eslint --suppress-all` once, then `--prune-suppressions`).
 import js from "@eslint/js";
 import prettier from "eslint-config-prettier";
 import tseslint from "typescript-eslint";

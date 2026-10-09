@@ -35,6 +35,11 @@ LANGUAGES: dict[str, tuple[tuple[str, ...], dict[str, str], dict[str, str]]] = {
                                     '  "ignores": ["**/node_modules/**", "**/dist/**", "**/out/**"]\n}\n'}),
     "yaml": ((".yml", ".yaml"), {"yaml/yamllint.yaml": ".standards/yamllint.yaml"}, {
         ".yamllint.yaml": "extends: .standards/yamllint.yaml\n"}),
+    "typescript": ((".ts", ".tsx"), {"typescript/eslint.config.mjs": ".standards/eslint.config.mjs",
+                                      "typescript/tsconfig.strict.json": ".standards/tsconfig.strict.json",
+                                      "typescript/prettierrc.json": ".prettierrc.json"}, {
+        "eslint.config.mjs": 'import standard from "./.standards/eslint.config.mjs";\n\n'
+                             'export default [...standard({ tsconfigRootDir: import.meta.dirname })];\n'}),
     "toml": ((".toml",), {"toml/taplo.toml": ".taplo.toml"}, {}),
     "shell": ((".sh", ".bash"), {"shell/.shellcheckrc": ".shellcheckrc"}, {}),
 }

@@ -19,7 +19,7 @@ and hold only its **ratchet** — the existing violations it has not fixed yet, 
 | Language | Format | Lint | Types | Notes |
 |---|---|---|---|---|
 | Python ≥ 3.11 | Ruff format, 120 columns | Ruff: `E W F I B UP SIM C4 PTH RUF PL S N` | Pyright `standard`, `strict` per new module | tests may `assert`; lazy imports allowed; complexity counts reviewed, not gated |
-| TypeScript | Prettier, 120 columns | ESLint ≥ 9 flat config + typescript-eslint `strictTypeChecked` + `stylisticTypeChecked` (`@cantica-tech/eslint-config`) | `tsc` strict + `noUncheckedIndexedAccess`, `noImplicitOverride`, `noFallthroughCasesInSwitch` (`typescript/tsconfig.strict.json`) | |
+| TypeScript | Prettier, 120 columns | ESLint ≥ 9 flat config + typescript-eslint `strictTypeChecked` + `stylisticTypeChecked` (`typescript/eslint.config.mjs`); ratchet: ESLint bulk suppressions | `tsc` strict + `noUncheckedIndexedAccess`, `noImplicitOverride`, `noFallthroughCasesInSwitch` (`typescript/tsconfig.strict.json`) | |
 | Markdown | none (prose is hand-wrapped, never reflowed) | markdownlint (`markdown/markdownlint.jsonc`) | — | no line length; compact tables |
 | YAML | — | yamllint (`yaml/yamllint.yaml`) | — | no line length |
 | GitHub Actions | — | actionlint; zizmor (medium and above) | — | third-party actions pinned to a commit SHA; least `permissions:` |
@@ -51,9 +51,11 @@ and hold only its **ratchet** — the existing violations it has not fixed yet, 
        with: { ref: v0.1.0 }
    ```
 
-4. TypeScript: `npm i -D @cantica-tech/eslint-config @cantica-tech/prettier-config`, then
-   `eslint.config.mjs` = `export default [...standard({ tsconfigRootDir: import.meta.dirname })]`,
-   `"prettier": "@cantica-tech/prettier-config"` in `package.json`, and `"extends"` the strict tsconfig.
+4. TypeScript: the sync writes `.standards/eslint.config.mjs`, `.standards/tsconfig.strict.json` and
+   `.prettierrc.json`, and creates `eslint.config.mjs` once. Add the devDependencies `eslint`, `@eslint/js`,
+   `typescript-eslint`, `eslint-config-prettier`; make the base tsconfig `"extends"` the strict one. Existing
+   violations: `npx eslint --suppress-all` once (the ratchet file `eslint-suppressions.json`), then
+   `--prune-suppressions` as they are fixed.
 
 ## Exceptions
 

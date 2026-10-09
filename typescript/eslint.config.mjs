@@ -26,6 +26,12 @@ export default function standard({ tsconfigRootDir, ignores = [] } = {}) {
       },
     },
     {
+      // tool configs (vitest.config.ts, …) belong to no tsconfig project: lint them without type information
+      files: ["**/*.config.ts", "**/*.config.mts"],
+      ...tseslint.configs.disableTypeChecked,
+      languageOptions: { parserOptions: { projectService: false, project: null } },
+    },
+    {
       files: ["**/*.test.ts", "**/test/**/*.ts"],
       rules: { "@typescript-eslint/no-non-null-assertion": "off", "@typescript-eslint/no-unsafe-assignment": "off" },
     },

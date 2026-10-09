@@ -1,0 +1,16 @@
+# The standards repository runs its own standard.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  standards:
+    uses: ./.github/workflows/lint.yml
+    with:
+      ref: ${{ github.sha }}

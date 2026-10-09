@@ -13,6 +13,7 @@ and never overwritten. `.standards/VERSION` records the standards version.
 `--check` writes nothing and exits 1 when a synced file differs or is missing
 (CI: the repository runs the standard it claims). Stdlib only.
 """
+
 from __future__ import annotations
 
 import subprocess
@@ -24,22 +25,41 @@ HERE = Path(__file__).resolve().parent.parent
 # language -> (detecting suffixes, synced files {source: target}, thin configs {target: text})
 LANGUAGES: dict[str, tuple[tuple[str, ...], dict[str, str], dict[str, str]]] = {
     "all": ((), {".editorconfig": ".editorconfig"}, {}),
-    "python": ((".py",), {"python/ruff.toml": ".standards/ruff.toml",
-                          "python/pyrightconfig.base.json": ".standards/pyright.json"}, {
-        "ruff.toml": '# Ruff: the cantica-tech standard plus this repository\'s ratchet only.\n'
-                     'extend = ".standards/ruff.toml"\n',
-        "pyrightconfig.json": '{\n  "extends": "./.standards/pyright.json",\n  "include": ["."],\n'
-                              '  "exclude": ["**/node_modules", "**/.venv", "dist", "out"]\n}\n'}),
-    "markdown": ((".md",), {"markdown/markdownlint.jsonc": ".standards/markdownlint.jsonc"}, {
-        ".markdownlint-cli2.jsonc": '{\n  "config": { "extends": ".standards/markdownlint.jsonc" },\n'
-                                    '  "ignores": ["**/node_modules/**", "**/dist/**", "**/out/**"]\n}\n'}),
-    "yaml": ((".yml", ".yaml"), {"yaml/yamllint.yaml": ".standards/yamllint.yaml"}, {
-        ".yamllint.yaml": "extends: .standards/yamllint.yaml\n"}),
-    "typescript": ((".ts", ".tsx"), {"typescript/eslint.config.mjs": ".standards/eslint-standard.mjs",
-                                      "typescript/tsconfig.strict.json": ".standards/tsconfig.strict.json",
-                                      "typescript/prettierrc.json": ".prettierrc.json"}, {
-        "eslint.config.mjs": 'import standard from "./.standards/eslint-standard.mjs";\n\n'
-                             'export default [...standard({ tsconfigRootDir: import.meta.dirname })];\n'}),
+    "python": (
+        (".py",),
+        {"python/ruff.toml": ".standards/ruff.toml", "python/pyrightconfig.base.json": ".standards/pyright.json"},
+        {
+            "ruff.toml": "# Ruff: the cantica-tech standard plus this repository's ratchet only.\n"
+            'extend = ".standards/ruff.toml"\n',
+            "pyrightconfig.json": '{\n  "extends": "./.standards/pyright.json",\n  "include": ["."],\n'
+            '  "exclude": ["**/node_modules", "**/.venv", "dist", "out"]\n}\n',
+        },
+    ),
+    "markdown": (
+        (".md",),
+        {"markdown/markdownlint.jsonc": ".standards/markdownlint.jsonc"},
+        {
+            ".markdownlint-cli2.jsonc": '{\n  "config": { "extends": ".standards/markdownlint.jsonc" },\n'
+            '  "ignores": ["**/node_modules/**", "**/dist/**", "**/out/**"]\n}\n'
+        },
+    ),
+    "yaml": (
+        (".yml", ".yaml"),
+        {"yaml/yamllint.yaml": ".standards/yamllint.yaml"},
+        {".yamllint.yaml": "extends: .standards/yamllint.yaml\n"},
+    ),
+    "typescript": (
+        (".ts", ".tsx"),
+        {
+            "typescript/eslint.config.mjs": ".standards/eslint-standard.mjs",
+            "typescript/tsconfig.strict.json": ".standards/tsconfig.strict.json",
+            "typescript/prettierrc.json": ".prettierrc.json",
+        },
+        {
+            "eslint.config.mjs": 'import standard from "./.standards/eslint-standard.mjs";\n\n'
+            "export default [...standard({ tsconfigRootDir: import.meta.dirname })];\n"
+        },
+    ),
     "toml": ((".toml",), {"toml/taplo.toml": ".taplo.toml"}, {}),
     "shell": ((".sh", ".bash"), {"shell/.shellcheckrc": ".shellcheckrc"}, {}),
 }
@@ -62,8 +82,12 @@ def languages(repo: Path) -> list[str]:
 
 
 def version() -> str:
-    tag = subprocess.run(["git", "-C", str(HERE), "describe", "--tags", "--always", "--dirty"],
-                         capture_output=True, text=True, check=False).stdout.strip()
+    tag = subprocess.run(
+        ["git", "-C", str(HERE), "describe", "--tags", "--always", "--dirty"],
+        capture_output=True,
+        text=True,
+        check=False,
+    ).stdout.strip()
     return tag or (HERE / "VERSION").read_text(encoding="utf-8").strip()
 
 
@@ -71,7 +95,7 @@ def main(argv: list[str]) -> int:
     args = [a for a in argv if not a.startswith("--")]
     check = "--check" in argv
     if len(args) != 1:
-        print(__doc__.strip().splitlines()[2].strip())
+        print((__doc__ or "").strip().splitlines()[2].strip())
         return 2
     repo = Path(args[0]).resolve()
     drift, written = [], []

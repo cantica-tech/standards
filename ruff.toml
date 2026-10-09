@@ -1,0 +1,2 @@
+# Ruff: the cantica-tech standard plus this repository's ratchet only.
+extend = ".standards/ruff.toml"

@@ -1,0 +1,12 @@
+// cantica-tech Markdown standard (markdownlint rules). Synced as `.standards/markdownlint.jsonc`;
+// a repository's `.markdownlint-cli2.jsonc` says `"config": { "extends": ".standards/markdownlint.jsonc" }`.
+// Prose is wrapped by hand and never reflowed.
+{
+  "default": true,
+  "MD013": false,
+  "MD024": { "siblings_only": true },
+  "MD033": false,
+  "MD036": false,
+  "MD041": false,
+  "MD060": false
+}

@@ -1,0 +1,17 @@
+{
+  "name": "@cantica-tech/eslint-config",
+  "version": "0.1.0",
+  "description": "cantica-tech TypeScript lint standard: ESLint flat config, typescript-eslint strict and stylistic, type-aware.",
+  "type": "module",
+  "exports": "./index.js",
+  "license": "UNLICENSED",
+  "peerDependencies": {
+    "eslint": ">=9.0.0 <11",
+    "typescript": ">=5.4.0",
+    "typescript-eslint": "^8.71.0"
+  },
+  "dependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint-config-prettier": "^10.1.8"
+  }
+}

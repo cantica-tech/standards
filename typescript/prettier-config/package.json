@@ -1,0 +1,7 @@
+{
+  "name": "@cantica-tech/prettier-config",
+  "version": "0.1.0",
+  "description": "cantica-tech formatting standard for TypeScript, JSON, YAML and CSS.",
+  "main": "index.json",
+  "license": "UNLICENSED"
+}

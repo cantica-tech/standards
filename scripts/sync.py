@@ -60,6 +60,7 @@ LANGUAGES: dict[str, tuple[tuple[str, ...], dict[str, str], dict[str, str]]] = {
             "export default [...standard({ tsconfigRootDir: import.meta.dirname })];\n"
         },
     ),
+    "actions": ((".github/workflows/",), {"actions/zizmor.yml": ".standards/zizmor.yml"}, {}),
     "toml": ((".toml",), {"toml/taplo.toml": ".taplo.toml"}, {}),
     "shell": ((".sh", ".bash"), {"shell/.shellcheckrc": ".shellcheckrc"}, {}),
 }
@@ -75,8 +76,12 @@ def tracked(repo: Path) -> list[str]:
 def languages(repo: Path) -> list[str]:
     files = tracked(repo)
     found = ["all"]
-    for name, (suffixes, _, _) in LANGUAGES.items():
-        if suffixes and any(f.endswith(suffixes) for f in files if not f.startswith(".standards/")):
+    own = [f for f in files if not f.startswith(".standards/")]
+    for name, (marks, _, _) in LANGUAGES.items():
+        if name == "typescript" and "package.json" not in own:
+            continue  # .ts files without a Node project (a module's UI contribution, …): no ESLint here
+        folders = tuple(m for m in marks if m.endswith("/"))
+        if marks and any(f.endswith(marks) or (folders and f.startswith(folders)) for f in own):
             found.append(name)
     return found
 

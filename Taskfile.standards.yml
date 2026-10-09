@@ -49,7 +49,7 @@ tasks:
       - '{{if .HAS_MD}}{{.MARKDOWNLINT}} "**/*.md"{{end}}'
       - '{{if .HAS_YAML}}{{.YAMLLINT}} --strict .{{end}}'
       - '{{if .HAS_ACTIONS}}{{.ACTIONLINT}}{{end}}'
-      - '{{if .HAS_ACTIONS}}{{.ZIZMOR}} --min-severity medium .github/workflows{{end}}'
+      - '{{if .HAS_ACTIONS}}{{.ZIZMOR}} --config .standards/zizmor.yml --min-severity medium .github/workflows{{end}}'
       - '{{if .HAS_SH}}git ls-files "*.sh" | xargs {{.SHELLCHECK}}{{end}}'
 
   standards:typecheck:

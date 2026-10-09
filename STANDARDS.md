@@ -19,10 +19,10 @@ and hold only its **ratchet** — the existing violations it has not fixed yet, 
 | Language | Format | Lint | Types | Notes |
 |---|---|---|---|---|
 | Python ≥ 3.11 | Ruff format, 120 columns | Ruff: `E W F I B UP SIM C4 PTH RUF PL S N` | Pyright `standard`, `strict` per new module | tests may `assert`; lazy imports allowed; complexity counts reviewed, not gated |
-| TypeScript | Prettier, 120 columns | ESLint ≥ 9 flat config + typescript-eslint `strictTypeChecked` + `stylisticTypeChecked` (`typescript/eslint.config.mjs`); ratchet: ESLint bulk suppressions | `tsc` strict + `noUncheckedIndexedAccess`, `noImplicitOverride`, `noFallthroughCasesInSwitch` (`typescript/tsconfig.strict.json`) | |
+| TypeScript (a Node project: root `package.json`) | Prettier, 120 columns | ESLint ≥ 9 flat config + typescript-eslint `strictTypeChecked` + `stylisticTypeChecked` (`typescript/eslint.config.mjs`); ratchet: ESLint bulk suppressions | `tsc` strict + `noUncheckedIndexedAccess`, `noImplicitOverride`, `noFallthroughCasesInSwitch` (`typescript/tsconfig.strict.json`) | |
 | Markdown | none (prose is hand-wrapped, never reflowed) | markdownlint (`markdown/markdownlint.jsonc`) | — | no line length; compact tables |
 | YAML | — | yamllint (`yaml/yamllint.yaml`) | — | no line length |
-| GitHub Actions | — | actionlint; zizmor (medium and above) | — | third-party actions pinned to a commit SHA; least `permissions:` |
+| GitHub Actions | — | actionlint; zizmor (medium and above, `actions/zizmor.yml`) | — | third-party actions pinned to a commit SHA, cantica-tech's own reusable workflows to a release tag; least `permissions:` |
 | Shell | — | ShellCheck (`shell/.shellcheckrc`) | — | |
 | TOML | Taplo (`toml/taplo.toml`) | — | — | |
 | Everything | EditorConfig (UTF-8, LF, final newline) | — | — | secrets scanning (gitleaks) comes in v0.2 |
@@ -49,8 +49,8 @@ and hold only its **ratchet** — the existing violations it has not fixed yet, 
    ```yaml
    jobs:
      standards:
-       uses: cantica-tech/standards/.github/workflows/lint.yml@v0.1.0
-       with: { ref: v0.1.0 }
+       uses: cantica-tech/standards/.github/workflows/lint.yml@v0.1.1
+       with: { ref: v0.1.1 }
    ```
 
 4. TypeScript: the sync writes `.standards/eslint-standard.mjs` (not named eslint.config.*: ESLint would take it for that folder's config), `.standards/tsconfig.strict.json` and

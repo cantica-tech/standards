@@ -51,10 +51,10 @@ jobs:
       - name: Standards in sync
         run: python3 .standards-src/scripts/sync.py . --check
       - name: Lint
-        run: task --taskfile .standards-src/Taskfile.standards.yml --dir . lint
+        run: task --taskfile .standards-src/Taskfile.standards.yml --dir . standards:lint
       - name: Type check
         if: inputs.typecheck
-        run: task --taskfile .standards-src/Taskfile.standards.yml --dir . typecheck
+        run: task --taskfile .standards-src/Taskfile.standards.yml --dir . standards:typecheck
       - name: npm lint, format, typecheck
         if: inputs.node
         run: |

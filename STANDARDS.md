@@ -40,6 +40,8 @@ and hold only its **ratchet** — the existing violations it has not fixed yet, 
        taskfile: '{{.STANDARDS_DIR | default "../standards"}}/Taskfile.standards.yml'
        optional: true
        flatten: true
+       # excludes: [lint, format, typecheck]   # when the repository has tasks of those names; its own then
+       #                                       # call standards:lint / standards:format / standards:typecheck
    ```
 
 3. Call the reusable workflow in CI, at the same tag as the sync:

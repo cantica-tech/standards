@@ -1,6 +1,9 @@
 # cantica-tech standard tasks. A repository's own Taskfile includes this file (a checkout of the
 # standards repository next to it, or STANDARDS_DIR) with `flatten: true`, so every repository has the
 # same `task lint`, `task format`, `task typecheck`, `task standards:sync`, `task standards:check`.
+# The work is in `standards:lint|format|typecheck`; `lint`, `format`, `typecheck` only call them. A
+# repository with tasks of those names already excludes the wrappers (`excludes: [lint, format, typecheck]`)
+# and calls `standards:lint` (…) from its own.
 # Tools run through uvx / npx at the versions pinned here — nothing to install but uv and Node.
 version: "3"
 
@@ -22,7 +25,7 @@ tasks:
     desc: "Fail if this repository's copy of the standards drifted"
     cmds: ['python3 "{{.STANDARDS_DIR}}/scripts/sync.py" . --check']
 
-  format:
+  standards:format:
     desc: "Format the code in place (Ruff; Prettier where package.json has it)"
     cmds:
       - '{{if .HAS_PY}}{{.RUFF}} format .{{end}}'
@@ -37,7 +40,7 @@ tasks:
       HAS_PRETTIER: {sh: 'test -f package.json && grep -q prettier package.json && echo yes || true'}
       HAS_DEV_REQS: {sh: 'test -f requirements-dev.txt && echo yes || true'}
 
-  lint:
+  standards:lint:
     desc: "Every linter this repository's languages call for (the same set CI runs)"
     vars: *detect
     cmds:
@@ -49,9 +52,21 @@ tasks:
       - '{{if .HAS_ACTIONS}}{{.ZIZMOR}} --min-severity medium .github/workflows{{end}}'
       - '{{if .HAS_SH}}git ls-files "*.sh" | xargs {{.SHELLCHECK}}{{end}}'
 
-  typecheck:
+  standards:typecheck:
     desc: "Pyright (Python); TypeScript type-checks through its own `npm run typecheck`"
     vars: *detect
     cmds:
       # the repository's dev requirements (pytest, …) so imports resolve
       - '{{if .HAS_PY}}uvx {{if .HAS_DEV_REQS}}--with-requirements requirements-dev.txt {{end}}pyright@1.1.414{{end}}'
+
+  lint:
+    desc: "Lint (the cantica-tech standard)"
+    cmds: [{task: standards:lint}]
+
+  format:
+    desc: "Format (the cantica-tech standard)"
+    cmds: [{task: standards:format}]
+
+  typecheck:
+    desc: "Type-check (the cantica-tech standard)"
+    cmds: [{task: standards:typecheck}]

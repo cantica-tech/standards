@@ -7,7 +7,6 @@ version: "3"
 vars:
   STANDARDS_DIR: '{{.STANDARDS_DIR | default "../standards"}}'
   RUFF: "uvx ruff@0.16.10"
-  PYRIGHT: "uvx pyright@1.1.414"
   YAMLLINT: "uvx yamllint@1.38.0"
   MARKDOWNLINT: "npx --yes markdownlint-cli2@0.23.3"
   ACTIONLINT: "uvx --from actionlint-py@1.7.12.25 actionlint"
@@ -36,6 +35,7 @@ tasks:
       HAS_ACTIONS: {sh: 'git ls-files ".github/workflows/*" | head -1'}
       HAS_SH: {sh: 'git ls-files "*.sh" | head -1'}
       HAS_PRETTIER: {sh: 'test -f package.json && grep -q prettier package.json && echo yes || true'}
+      HAS_DEV_REQS: {sh: 'test -f requirements-dev.txt && echo yes || true'}
 
   lint:
     desc: "Every linter this repository's languages call for (the same set CI runs)"
@@ -53,4 +53,5 @@ tasks:
     desc: "Pyright (Python); TypeScript type-checks through its own `npm run typecheck`"
     vars: *detect
     cmds:
-      - '{{if .HAS_PY}}{{.PYRIGHT}}{{end}}'
+      # the repository's dev requirements (pytest, …) so imports resolve
+      - '{{if .HAS_PY}}uvx {{if .HAS_DEV_REQS}}--with-requirements requirements-dev.txt {{end}}pyright@1.1.414{{end}}'

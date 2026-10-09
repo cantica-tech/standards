@@ -51,7 +51,7 @@ and hold only its **ratchet** — the existing violations it has not fixed yet, 
        with: { ref: v0.1.0 }
    ```
 
-4. TypeScript: the sync writes `.standards/eslint.config.mjs`, `.standards/tsconfig.strict.json` and
+4. TypeScript: the sync writes `.standards/eslint-standard.mjs` (not named eslint.config.*: ESLint would take it for that folder's config), `.standards/tsconfig.strict.json` and
    `.prettierrc.json`, and creates `eslint.config.mjs` once. Add the devDependencies `eslint`, `@eslint/js`,
    `typescript-eslint`, `eslint-config-prettier`; make the base tsconfig `"extends"` the strict one. Existing
    violations: `npx eslint --suppress-all` once (the ratchet file `eslint-suppressions.json`), then
